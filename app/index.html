@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CustomPorts</title>
+
+    <link type="text/css" rel="stylesheet" href="dist/lib.css">
+
+    <style>
+        html, body, #graphComponent {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background-color: #2e2e2e;
+        }
+
+        .flow-node-title {
+            font-family: sans-serif;
+            font-size: 8px;
+            fill: #dcdcdc;
+        }
+
+        .flow-property-label {
+            font-family: sans-serif;
+            font-size: 7px;
+            fill: #dcdcdc;
+        }
+    </style>
+</head>
+<body>
+<div id="graphComponent"></div>
+
+
+<script src="dist/lib.js"></script>
+<script src="dist/app.js"></script>
+
+<script type="text/yfiles-template">
+
+    <g id="SumTemplate">
+        <defs>
+            <clipPath id="round-corner">
+                <rect x="0" y="0" width="70" height="40" rx="6" ry="6"></rect>
+            </clipPath>
+        </defs>
+        <rect fill="#323232" rx="6" ry="6" width="70" height="70"></rect>
+        <rect clip-path="url(#round-corner)" fill="#6C3CA9" opacity="0.8" width="70" height="20"></rect>
+        <text class="flow-node-title" x="7" y="13" >Sum</text>
+
+        <ellipse title="Enable/disable this element" rx="3" ry="3" transform="translate(60,10)" fill="{Binding enabled, Converter=enabledConverter}" stroke-width="0.8" stroke="white" opacity="0.8"></ellipse>
+
+        <rect fill="#282828" height="12" width="70" x="0" y="22"></rect>
+        <text class="flow-property-label" text-anchor="end" x="62" y="30">Output</text>
+
+        <rect fill="#282828" height="12" width="70" x="0" y="38"></rect>
+        <text class="flow-property-label" text-anchor="start" x="5" y="46">Input 1</text>
+
+        <rect fill="#282828" height="12" width="70" x="0" y="54"></rect>
+        <text class="flow-property-label" text-anchor="start" x="5" y="62">Input 2</text>
+
+        <rect stroke="#636363" stroke-width="1" fill="transparent" rx="6" ry="6" width="70" height="70"></rect>
+    </g>
+
+    <g id="SpyTemplate">
+        <defs>
+            <clipPath id="round-corner">
+                <rect x="0" y="0" width="70" height="40" rx="6" ry="6"></rect>
+            </clipPath>
+        </defs>
+        <rect fill="#323232" rx="6" ry="6" width="70" height="50"></rect>
+        <rect clip-path="url(#round-corner)" fill="#2F47B0" opacity="0.8" width="70" height="20"></rect>
+        <text class="flow-node-title" x="7" y="13">Spy</text>
+
+        <ellipse title="Enable/disable this element" rx="3" ry="3" transform="translate(60,10)" fill="{Binding enabled, Converter=enabledConverter}" stroke-width="0.8" stroke="white" opacity="0.8"></ellipse>
+
+        <rect fill="#282828" height="12" width="70" x="0" y="22"></rect>
+        <text class="flow-property-label" text-anchor="start" x="5" y="30">Input</text>
+
+        <text class="flow-property-label" text-anchor="middle" x="35" y="43" data-content="{Binding value, Converter=Smart_Display}"></text>
+
+        <rect stroke="#636363" stroke-width="1" fill="transparent" rx="6" ry="6" width="70" height="50"></rect>
+    </g>
+
+    <g id="RandomTemplate">
+        <defs>
+            <clipPath id="round-corner">
+                <rect x="0" y="0" width="70" height="40" rx="6" ry="6"></rect>
+            </clipPath>
+        </defs>
+        <rect fill="#323232" rx="6" ry="6" width="70" height="50"></rect>
+        <rect clip-path="url(#round-corner)" fill="#DC7700" opacity="0.8" width="70" height="20"></rect>
+        <text class="flow-node-title" x="7" y="13">Random</text>
+
+        <ellipse title="Enable/disable this element" rx="3" ry="3" transform="translate(60,10)" fill="{Binding enabled, Converter=enabledConverter}" stroke-width="0.8" stroke="white" opacity="0.8"></ellipse>
+
+        <rect fill="#282828" height="12" width="70" x="0" y="22"></rect>
+        <text class="flow-property-label" text-anchor="end" x="62" y="30">Output</text>
+
+        <text class="flow-property-label" text-anchor="middle" x="35" y="43" data-content="{Binding value, Converter=Smart_Display}"></text>
+
+        <rect stroke="#636363" stroke-width="1" fill="transparent" rx="6" ry="6" width="70" height="50"></rect>
+    </g>
+
+
+    <g id="outputPortStyle">
+        <ellipse cx="0" cy="0" fill="#636363" rx="3" ry="3" stroke="#000000" stroke-width="0"></ellipse>
+        <ellipse cx="0" cy="0" fill="#2e2e2e" rx="2" ry="2"></ellipse>
+        <path d="M -0.5 3 A 3 3 0 0 0 -0.5 -3" fill="none" id="svg_4" stroke="#636363" stroke-width="1"></path>
+    </g>
+    <g id="inputPortStyle">
+        <ellipse cx="0" cy="0" fill="#636363" rx="3" ry="3"></ellipse>
+        <ellipse cx="0" cy="0" fill="#2e2e2e" rx="2" ry="2"></ellipse>
+        <path d="M 0.5 -3 A 3 3 0 0 0 0.5 3" fill="none" id="svg_4" stroke="#636363" stroke-width="1"></path>
+    </g>
+</script>
+</body>
+</html>
