@@ -1,4 +1,4 @@
-import {BaseClass, DefaultPortCandidate, INode, IPortCandidate, IPortCandidateProvider, List, PortCandidateProviderBase} from 'yfiles';
+import {BaseClass, DefaultPortCandidate, IEnumerable, IInputModeContext, INode, IPortCandidate, IPortCandidateProvider, List, PortCandidateProviderBase} from 'yfiles';
 import {FlowPortModel} from './FlowPortModel';
 import {PortType} from '../core/PortType';
 import {IFlowPortViewModel} from '../core/IFlowPortViewModel';
@@ -18,19 +18,12 @@ export default class PortCandidateProvider extends   PortCandidateProviderBase {
      * @returns {IEnumerable.<IPortCandidate>}
      */
     getAllSourcePortCandidates(context) {
-        // create a port candidate at the right side of the node
+
         const candidates = new List<IPortCandidate>();
-        const found = this.node.ports.filter(p => p.tag && (p.tag as IFlowPortViewModel).portType == PortType.OUTPUT);
-        if (found.size === 0) {
-            return candidates;
-        }
-        // const defaultPortCandidate: IPortCandidate = new DefaultPortCandidate(
-        //     this.node,
-        //     found.first().locationParameter
-        // );
-        // candidates.add(defaultPortCandidate);
+        // add all
         this.addExistingPorts(this.node, candidates);
-        return candidates
+        // but keep only the output
+        return  candidates.filter(p => p.port.tag && (p.port.tag as IFlowPortViewModel).portType == PortType.OUTPUT)
     }
 
     /**
@@ -40,13 +33,10 @@ export default class PortCandidateProvider extends   PortCandidateProviderBase {
      */
     getAllTargetPortCandidates(context) {
         const candidates = new List<IPortCandidate>();
-        const found = this.node.ports.filter(p => p.tag && (p.tag as IFlowPortViewModel).portType == PortType.INPUT);
-        if (found.size === 0) {
-            return candidates;
-        }
-
+        // add all
         this.addExistingPorts(this.node, candidates);
-        return candidates
+        // but keep only the output
+        return  candidates.filter(p => p.port.tag && (p.port.tag as IFlowPortViewModel).portType == PortType.INPUT);
     }
 
     /**
@@ -65,5 +55,9 @@ export default class PortCandidateProvider extends   PortCandidateProviderBase {
      */
     getTargetPortCandidates(context, source) {
         return this.getAllTargetPortCandidates(context)
+    }
+
+    getPortCandidates(context: IInputModeContext): IEnumerable<IPortCandidate> {
+        return undefined;
     }
 }

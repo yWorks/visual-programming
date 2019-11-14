@@ -1,5 +1,5 @@
 import {ISurface} from './ISurface';
-import {BridgeCrossingStyle, BridgeManager, DefaultEdgePathCropper, Fill, GraphComponent, GraphEditorInputMode, GraphItemTypes, GraphObstacleProvider, HierarchicLayout, HierarchicNestingPolicy, IEdge, IGraph, INode, IPort, LayoutExecutor, License, ShapeNodeStyle, Size, TemplateNodeStyle} from 'yfiles';
+import {BridgeCrossingStyle, BridgeManager, DefaultEdgePathCropper, Fill, GraphComponent, GraphEditorInputMode, GraphItemTypes, GraphObstacleProvider, HierarchicLayout, HierarchicNestingPolicy, ICanvasObjectDescriptor, IEdge, IGraph, INode, IPort, LayoutExecutor, License, ShapeNodeStyle, Size, TemplateNodeStyle} from 'yfiles';
 import {IFlowModel} from './IFlowModel';
 import {IFlowPortViewModel} from './IFlowPortViewModel';
 import {IFlowNodeModel} from './IFlowNodeModel';
@@ -10,6 +10,7 @@ import IFlowEdgeViewModel from './IFlowEdgeViewModel';
 import RoutingEdgeStyle from '../style/EdgeStyle';
 import PortCandidateProvider from '../style/PortCandidateProvider';
 import * as _ from 'lodash';
+import {BackGridStyle} from '../style/BackGridStyle';
 
 
 /**
@@ -106,6 +107,9 @@ export class Surface implements ISurface {
 
         // crop the edge path at the port and not at the node bounds
         DefaultEdgePathCropper.isInstance(this.graph);
+
+        // this.graphComponent.backgroundGroup.addChild(new BackGridStyle(),
+        //     ICanvasObjectDescriptor.VISUAL);
 
         const decorator = this.graph.decorator;
         const pathCropper = new DefaultEdgePathCropper();

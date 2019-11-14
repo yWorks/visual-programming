@@ -47,8 +47,15 @@ export class FlowPortViewModel implements IFlowPortViewModel {
     port:IPort;
 
 
-    constructor(name, portType, viewModel, position) {
-        this._name = name;
+    /**
+     *
+     * @param propertyName {string} Sets the property name of the {@link IFlowNodeViewModel} which will be used to pass data from the source.
+     * @param portType {PortType} The port type.
+     * @param viewModel {IFlowNodeViewModel} The view-model of the node the port belongs to.
+     * @param position {Point} The position of the port on the shape.
+     */
+    constructor(propertyName, portType, viewModel, position) {
+        this._name = propertyName;
         this._portType = portType;
         this._viewModel = viewModel;
         this._position = position;
