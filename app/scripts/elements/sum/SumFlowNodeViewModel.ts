@@ -7,9 +7,6 @@ import * as _ from 'lodash';
 
 export class SumFlowNodeViewModel extends FlowNodeViewModel {
 
-
-    private _a: string;
-
     public set a(value: string) {
         this._a = value;
         this.update();
@@ -21,8 +18,6 @@ export class SumFlowNodeViewModel extends FlowNodeViewModel {
         return this._a;
 
     }
-
-    private _b: string;
 
     public set b(value: string) {
         this._b = value;
@@ -36,8 +31,6 @@ export class SumFlowNodeViewModel extends FlowNodeViewModel {
 
     }
 
-    private _sum: string;
-
     public set sum(value: string) {
         this._sum = value;
         this.firePropertyChanged('sum');
@@ -46,6 +39,23 @@ export class SumFlowNodeViewModel extends FlowNodeViewModel {
 
     public get sum(): string {
         return this._sum;
+
+    }
+
+
+    private _a: string;
+
+    private _b: string;
+
+    private _sum: string;
+
+    constructor(model) {
+        super('Sum', model);
+
+        this.portViewModels['Output'] = new FlowPortViewModel('sum', PortType.OUTPUT, this, new Point(70.0, 30 - 2));
+        this.portViewModels['Input1'] = new FlowPortViewModel('a', PortType.INPUT, this, new Point(0.0, 46 - 2));
+        this.portViewModels['Input2'] = new FlowPortViewModel('b', PortType.INPUT, this, new Point(0.0, 62 - 2));
+        this.model.nodes[this.id] = new FlowNodeModel(this.id, this.model);
 
     }
 
@@ -64,16 +74,6 @@ export class SumFlowNodeViewModel extends FlowNodeViewModel {
             return parseFloat(x);
         }
         return null;
-    }
-
-    constructor(model) {
-        super('Sum', model);
-
-        this.portViewModels['Output'] = new FlowPortViewModel('sum', PortType.OUTPUT, this, new Point(70.0, 30 - 2));
-        this.portViewModels['Input1'] = new FlowPortViewModel('a', PortType.INPUT, this, new Point(0.0, 46 - 2));
-        this.portViewModels['Input2'] = new FlowPortViewModel('b', PortType.INPUT, this, new Point(0.0, 62 - 2));
-        this.model.nodes[this.id] = new FlowNodeModel(this.id, this.model);
-
     }
 
 

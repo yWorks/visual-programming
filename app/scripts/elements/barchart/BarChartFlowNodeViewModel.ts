@@ -7,9 +7,6 @@ import * as _ from 'lodash';
 
 export class BarChartFlowNodeViewModel extends FlowNodeViewModel {
 
-
-    private _values: number[];
-
     /**
      * Property used by the stream to set the raw data given as string.
      * @param arrayAsString {string} Presumably an array of numbers in a string.
@@ -30,6 +27,17 @@ export class BarChartFlowNodeViewModel extends FlowNodeViewModel {
     }
 
 
+    private _values: number[];
+
+    constructor(model) {
+        super('Sum', model);
+
+        this.portViewModels['Input'] = new FlowPortViewModel('rawValues', PortType.INPUT, this, new Point(0.0, 30 - 2));
+        this.model.nodes[this.id] = new FlowNodeModel(this.id, this.model);
+
+    }
+
+
     update() {
 
     }
@@ -42,14 +50,6 @@ export class BarChartFlowNodeViewModel extends FlowNodeViewModel {
             }
         }
         return null;
-    }
-
-    constructor(model) {
-        super('Sum', model);
-
-        this.portViewModels['Input'] = new FlowPortViewModel('rawValues', PortType.INPUT, this, new Point(0.0, 30 - 2));
-        this.model.nodes[this.id] = new FlowNodeModel(this.id, this.model);
-
     }
 
 

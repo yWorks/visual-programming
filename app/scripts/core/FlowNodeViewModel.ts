@@ -20,18 +20,36 @@ export class FlowNodeViewModel extends BaseClass<IPropertyObservable>(IPropertyO
         this.firePropertyChanged('enabled');
     }
 
-    private _propertyChanged: any;
-
 
     get id(): string {
         return this._id;
     }
+
+    public get title(): string {
+        return this._title;
+    }
+
+    get model(): IFlowModel {
+        return this._model;
+    }
+
+    private _propertyChanged: any;
 
     private readonly _title: string;
     private readonly _id: string;
     private readonly _model: IFlowModel;
 
     protected _enabled: boolean;
+
+    /**
+     * Firest the PropertyChanged event.
+     * @param propertyName The name of the property that has changed
+     */
+    protected firePropertyChanged(propertyName) {
+        if (this._propertyChanged !== null) {
+            this._propertyChanged(this, new PropertyChangedEventArgs(propertyName))
+        }
+    }
 
     public portViewModels: { [key: string]: IFlowPortViewModel };
 
@@ -43,14 +61,6 @@ export class FlowNodeViewModel extends BaseClass<IPropertyObservable>(IPropertyO
         this._propertyChanged = null;
         this._enabled = true;
         this.portViewModels = {};
-    }
-
-    public get title(): string {
-        return this._title;
-    }
-
-    get model(): IFlowModel {
-        return this._model;
     }
 
     /**
@@ -67,16 +77,6 @@ export class FlowNodeViewModel extends BaseClass<IPropertyObservable>(IPropertyO
      */
     removePropertyChangedListener(listener) {
         this._propertyChanged = delegate.remove(this._propertyChanged, listener)
-    }
-
-    /**
-     * Firest the PropertyChanged event.
-     * @param propertyName The name of the property that has changed
-     */
-    protected firePropertyChanged(propertyName) {
-        if (this._propertyChanged !== null) {
-            this._propertyChanged(this, new PropertyChangedEventArgs(propertyName))
-        }
     }
 
     setPropertyValue(name, value) {

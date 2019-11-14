@@ -10,10 +10,6 @@ export class FlowPortParameter extends BaseClass<IPortLocationModelParameter>(IP
         return this._portIndex;
     }
 
-    _portType: any;
-    _model: any;
-    private readonly _portIndex: number;
-
     /**
      * @returns {PortType}
      */
@@ -27,6 +23,10 @@ export class FlowPortParameter extends BaseClass<IPortLocationModelParameter>(IP
     get model(): FlowPortModel {
         return this._model;
     }
+    private readonly _portIndex: number;
+
+    _portType: any;
+    _model: any;
 
     constructor(position: PortType, portIndex: number, model: FlowPortModel) {
         super();

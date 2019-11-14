@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const YFilesOptimizerPlugin = require('@yworks/optimizer/webpack-plugin');
 
 const config = {
-
+  devtool: 'inline-source-map',
   entry: {
     app: ['@babel/polyfill', path.resolve('app/scripts/app.ts')]
   },

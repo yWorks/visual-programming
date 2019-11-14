@@ -16,70 +16,6 @@ import * as _ from 'lodash';
  * High-level API managing the flow.
  */
 export class Surface implements ISurface {
-    graph: IGraph;
-    model: IFlowModel;
-    graphComponent: GraphComponent;
-
-    constructor() {
-        this.model = new FlowModel();
-        this.init();
-    }
-
-    init() {
-        this.setLicense();
-        this.createComponent();
-        this.setStyle();
-        this.defineBridges();
-        this.createInteractions();
-    }
-
-    setLicense() {
-
-        License.value = {
-            'company': 'The Orbifold b.v.b.a.',
-            'date': '10/22/2019',
-            'distribution': true,
-            'domains': [
-                '*'
-            ],
-            'fileSystemAllowed': true,
-            'licensefileversion': '1.1',
-            'localhost': true,
-            'oobAllowed': true,
-            'package': 'complete',
-            'product': 'yFiles for HTML',
-            'projectname': 'yWorks Consulting',
-            'subscription': '12/31/2020',
-            'type': 'project',
-            'version': '2.2',
-            'key': 'd9568c2bdf4ebd16cf3d80a0edc8fe155ca5a38c'
-        };
-    }
-
-    createComponent() {
-        this.graphComponent = new GraphComponent('#graphComponent');
-        this.graph = this.graphComponent.graph;
-
-    }
-
-    layout() {
-        const executor = new LayoutExecutor({
-            graphComponent: this.graphComponent,
-            layout: new HierarchicLayout({
-                layoutOrientation: 'left-to-right',
-                gridSpacing: 0
-            }),
-            animateViewport: true,
-            easedAnimation: true,
-            duration: '0.5s',
-            fixPorts: true,
-        });
-
-        executor.start().then( () => {
-            this.graphComponent.fitContent();
-            this.graphComponent.zoom = 3;
-        });
-    }
 
     private createInteractions() {
         const mode = new GraphEditorInputMode();
@@ -210,6 +146,70 @@ export class Surface implements ISurface {
                 return '?';
             }
         }
+    }
+    graph: IGraph;
+    model: IFlowModel;
+    graphComponent: GraphComponent;
+
+    constructor() {
+        this.model = new FlowModel();
+        this.init();
+    }
+
+    init() {
+        this.setLicense();
+        this.createComponent();
+        this.setStyle();
+        this.defineBridges();
+        this.createInteractions();
+    }
+
+    setLicense() {
+
+        License.value = {
+            'company': 'The Orbifold b.v.b.a.',
+            'date': '10/22/2019',
+            'distribution': true,
+            'domains': [
+                '*'
+            ],
+            'fileSystemAllowed': true,
+            'licensefileversion': '1.1',
+            'localhost': true,
+            'oobAllowed': true,
+            'package': 'complete',
+            'product': 'yFiles for HTML',
+            'projectname': 'yWorks Consulting',
+            'subscription': '12/31/2020',
+            'type': 'project',
+            'version': '2.2',
+            'key': 'd9568c2bdf4ebd16cf3d80a0edc8fe155ca5a38c'
+        };
+    }
+
+    createComponent() {
+        this.graphComponent = new GraphComponent('#graphComponent');
+        this.graph = this.graphComponent.graph;
+
+    }
+
+    layout() {
+        const executor = new LayoutExecutor({
+            graphComponent: this.graphComponent,
+            layout: new HierarchicLayout({
+                layoutOrientation: 'left-to-right',
+                gridSpacing: 0
+            }),
+            animateViewport: true,
+            easedAnimation: true,
+            duration: '0.5s',
+            fixPorts: true,
+        });
+
+        executor.start().then( () => {
+            this.graphComponent.fitContent();
+            this.graphComponent.zoom = 3;
+        });
     }
 
     connect(source: IPort, target: IPort): IEdge {

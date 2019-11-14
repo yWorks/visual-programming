@@ -12,11 +12,6 @@ export class RandomFlowNodeController extends FlowNodeController {
         (this.viewModel as RandomFlowNodeViewModel).mode = value;
     }
 
-    constructor( surface: ISurface) {
-        super( surface);
-        this.init();
-    }
-
 
     private init() {
         this.viewModel = new RandomFlowNodeViewModel(this.model);
@@ -30,5 +25,10 @@ export class RandomFlowNodeController extends FlowNodeController {
         const vmOutput = this.viewModel.portViewModels['Output'];
         this.ports['Output'] = this.surface.graph.addPort({owner:  this.node, locationParameter: FreeNodePortLocationModel.INSTANCE.createParameter( this.node, vmOutput.position), style: this.outputStyle, tag: vmOutput});
         vmOutput.port =  this.ports['Output'];
+    }
+
+    constructor( surface: ISurface) {
+        super( surface);
+        this.init();
     }
 }

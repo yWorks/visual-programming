@@ -10,8 +10,6 @@ export interface IFlowNodeViewModel extends IPropertyObservable {
     model: IFlowModel;
     title: String;
 
-    setPropertyValue(name, value);
-
     /**
      * Gets or sets whether the element is enabled
      * and propagates data across the flow.
@@ -22,4 +20,6 @@ export interface IFlowNodeViewModel extends IPropertyObservable {
      * Gets or sets the view-models assigned to the ports.
      */
     portViewModels: { [key: string]: IFlowPortViewModel };
+
+    setPropertyValue(name, value);
 }

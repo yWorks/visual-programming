@@ -8,22 +8,12 @@ import {IFlowNodeModel} from './IFlowNodeModel';
  * View-model attached to a port.
  */
 export class FlowPortViewModel implements IFlowPortViewModel {
-    port:IPort;
     get position(): Point {
         return this._position;
     }
 
     set position(value: Point) {
         this._position = value;
-    }
-
-
-    constructor(name, portType, viewModel, position) {
-        this._name = name;
-        this._portType = portType;
-        this._viewModel = viewModel;
-        this._position = position;
-
     }
 
     get viewModel(): IFlowNodeViewModel {
@@ -54,6 +44,16 @@ export class FlowPortViewModel implements IFlowPortViewModel {
     private _portType: PortType;
     private _viewModel: IFlowNodeViewModel;
     private _position: Point;
+    port:IPort;
+
+
+    constructor(name, portType, viewModel, position) {
+        this._name = name;
+        this._portType = portType;
+        this._viewModel = viewModel;
+        this._position = position;
+
+    }
 
     addPropertyChangedListener(listener: (sender: any, args: PropertyChangedEventArgs) => void): void {
     }

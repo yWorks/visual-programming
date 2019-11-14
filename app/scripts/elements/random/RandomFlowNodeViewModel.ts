@@ -49,11 +49,6 @@ export class RandomFlowNodeViewModel extends FlowNodeViewModel {
         this.update();
     }
 
-    private ticker: any;
-    private _mode: RandomMode;
-    private readonly _output: IFlowPortViewModel;
-    private generator: IRandomGenerator;
-
     set enabled(v: boolean) {
         this._enabled = v;
         this.firePropertyChanged('enabled');
@@ -68,8 +63,6 @@ export class RandomFlowNodeViewModel extends FlowNodeViewModel {
         return this._output;
     }
 
-    private _value: string;
-
     public set value(value: string) {
         this._value = value;
         this.firePropertyChanged('value');
@@ -79,6 +72,22 @@ export class RandomFlowNodeViewModel extends FlowNodeViewModel {
     public get value(): string {
         return this._value;
 
+    }
+
+    private ticker: any;
+    private _mode: RandomMode;
+    private readonly _output: IFlowPortViewModel;
+    private generator: IRandomGenerator;
+
+    private _value: string;
+
+    constructor(model) {
+        super('Random', model);
+
+        this.portViewModels['Output'] = new FlowPortViewModel('value', PortType.OUTPUT, this, new Point(70.0, 30 - 2));
+        this.model.nodes[this.id] = new FlowNodeModel(this.id, this.model);
+        this.mode = RandomMode.NUNBER;
+        this.enabled = true;
     }
 
     update() {
@@ -103,15 +112,6 @@ export class RandomFlowNodeViewModel extends FlowNodeViewModel {
             clearInterval(this.ticker);
             this.ticker = null;
         }
-    }
-
-    constructor(model) {
-        super('Random', model);
-
-        this.portViewModels['Output'] = new FlowPortViewModel('value', PortType.OUTPUT, this, new Point(70.0, 30 - 2));
-        this.model.nodes[this.id] = new FlowNodeModel(this.id, this.model);
-        this.mode = RandomMode.NUNBER;
-        this.enabled = true;
     }
 
 }

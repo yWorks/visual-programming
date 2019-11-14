@@ -16,6 +16,11 @@ Class.ensure(LayoutExecutor);
 class App {
     surface: ISurface;
 
+    constructor() {
+        this.surface = new Surface();
+        this.createSampleGraph();
+    }
+
     createSampleGraph() {
 
         // const r = new RandomFlowNodeController(model, surface);
@@ -39,11 +44,6 @@ class App {
         const spy = new SpyFlowNodeController(this.surface);
         this.surface.connect(random.ports['Output'], spy.ports['Input']);
         this.surface.layout();
-    }
-
-    constructor() {
-        this.surface = new Surface();
-        this.createSampleGraph();
     }
 
 }

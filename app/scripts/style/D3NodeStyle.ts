@@ -74,7 +74,7 @@ export default class D3ChartNodeStyle extends NodeStyleBase {
         // clipPath.appendChild(clipRec);
         // defs.appendChild(clipPath);
         // svg.appendChild(defs);
-        const defs = group.append('defs')
+        const defs = group.append('defs');
 
 
         // clipping of the whole node
@@ -86,7 +86,7 @@ export default class D3ChartNodeStyle extends NodeStyleBase {
             .attr('width', 70)
             .attr('height', 90)
             .attr('x', 0)
-            .attr('y', 0)
+            .attr('y', 0);
         group.attr('clip-path', 'url(#total)');
 
         // the background
@@ -119,7 +119,7 @@ export default class D3ChartNodeStyle extends NodeStyleBase {
             .attr('width', 70)
             .attr('height', 20)
             .attr('opacity', 0.8)
-            .attr('fill', 'seagreen')
+            .attr('fill', 'seagreen');
         //enable-disable
         group.append('ellipse')
         //         <ellipse title="Enable/disable this element" rx="3" ry="3" transform="translate(60,10)" fill="{Binding enabled, Converter=enabledConverter}" stroke-width="0.8" stroke="white" opacity="0.8"></ellipse>
@@ -130,7 +130,7 @@ export default class D3ChartNodeStyle extends NodeStyleBase {
             .attr('stroke-width', 0.8)
             .attr('opacity', 0.8)
             .attr('stroke', 'white')
-            .attr('transform', 'translate(60,10)')
+            .attr('transform', 'translate(60,10)');
 
         group.append('text')
             .attr('class', 'flow-node-title')

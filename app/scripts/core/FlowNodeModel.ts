@@ -9,17 +9,6 @@ import {StreamEvent} from './StreamEvent';
  * The model of a flow node.
  */
 export class FlowNodeModel implements IFlowNodeModel {
-    private _id: string;
-
-
-    private _model: FlowModel;
-    private values: { [key: string]: string };
-    /**
-     * Occurs whenever something happens on the in/out.
-     */
-    public onChange: Stream<any, never>;
-    // @ts-ignore
-    private onChangeEmitter: Emitter;
 
 
     public get model() {
@@ -36,6 +25,17 @@ export class FlowNodeModel implements IFlowNodeModel {
     public set id(v) {
         this._id = v;
     }
+    private _id: string;
+
+
+    private readonly _model: FlowModel;
+    private readonly values: { [key: string]: string };
+    // @ts-ignore
+    private onChangeEmitter: Emitter;
+    /**
+     * Occurs whenever something happens on the in/out.
+     */
+    public onChange: Stream<any, never>;
 
     /**
      *

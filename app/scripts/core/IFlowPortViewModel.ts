@@ -21,8 +21,8 @@ export interface IFlowPortViewModel extends IPropertyObservable {
     viewModel: IFlowNodeViewModel;
 
     position: Point;
+    port:IPort;
 
     getNodeModel(): IFlowNodeModel
     setProperty(name, value);
-    port:IPort;
 }

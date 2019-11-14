@@ -8,11 +8,18 @@ import {IFlowNodeViewModel} from './IFlowNodeViewModel';
  * Base implementation of {@link IFlowNodeController}.
  */
 export abstract class FlowNodeController implements IFlowNodeController {
+
+    public get enabled() {
+        return this.viewModel.enabled;
+    }
+
+    public set enabled(v) {
+        this.viewModel.enabled = v;
+    }
     protected model: IFlowModel;
     protected surface: ISurface;
     protected outputStyle: TemplatePortStyle;
     protected inputStyle: TemplatePortStyle;
-    public ports: { [key: string]: IPort };
     protected viewModel: IFlowNodeViewModel;
     protected node:INode;
     protected constructor(  surface: ISurface) {
@@ -32,14 +39,7 @@ export abstract class FlowNodeController implements IFlowNodeController {
             normalizedOutline: outlinePath
         });
     }
-
-    public get enabled() {
-        return this.viewModel.enabled;
-    }
-
-    public set enabled(v) {
-        this.viewModel.enabled = v;
-    }
+    public ports: { [key: string]: IPort };
 
 
 }
