@@ -1,6 +1,5 @@
 import * as d3 from 'd3';
 import {NodeStyleBase, SvgVisual} from 'yfiles'
-import {IFlowNodeViewModel} from '../core/IFlowNodeViewModel';
 import {BarChartFlowNodeViewModel} from '../elements/barchart/BarChartFlowNodeViewModel';
 import * as  _ from 'lodash';
 
@@ -20,10 +19,6 @@ const color = d3
     .range(['#1dccc2', '#2f5b88'])
     .interpolate(d3.interpolateHcl);
 
-/**
- * A node style that triggers the sparkline rendering and includes the result in
- * the node visualization.
- */
 export default class D3ChartNodeStyle extends NodeStyleBase {
     constructor() {
         super();
@@ -35,7 +30,6 @@ export default class D3ChartNodeStyle extends NodeStyleBase {
      * @return {SvgVisual}
      */
     createVisual(renderContext, node) {
-        // create a g element and use it as a container for the sparkline visualization
         const g = window.document.createElementNS('http://www.w3.org/2000/svg', 'g');
         const svgVisual = new SvgVisual(g);
 
@@ -58,22 +52,6 @@ export default class D3ChartNodeStyle extends NodeStyleBase {
 
         const group = d3.select(g);
 
-        // const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        // // temporarily add the svg to the body so the elements can be measured
-        // window.document.body.appendChild(svg);
-        //
-        // const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-        //
-        // const clipPath = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
-        // clipPath.setAttribute('id', 'round-corner');
-        // const clipRec = document.createElementNS('http://www.w3.org/2000/svg', 'rec');
-        // clipRec.setAttribute('width', '70');
-        // clipRec.setAttribute('height', '30');
-        // clipRec.setAttribute('rx', '6');
-        // clipRec.setAttribute('ry', '6');
-        // clipPath.appendChild(clipRec);
-        // defs.appendChild(clipPath);
-        // svg.appendChild(defs);
         const defs = group.append('defs');
 
 
@@ -181,12 +159,7 @@ export default class D3ChartNodeStyle extends NodeStyleBase {
         color.domain([0, d3.max(data)]);
 
         const group = d3.select(g);
-        // group.append('rect')
-        //     .attr('width', 70)
-        //     .attr('height', 70)
-        //     .attr('rx', 6)
-        //     .attr('ry', 6)
-        //     .attr('fill', '#323232');
+
         group
             .attr('transform', `translate(${x} ${y})`)
             .select('rect')

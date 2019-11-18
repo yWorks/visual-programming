@@ -1,5 +1,5 @@
 import {ISurface} from './ISurface';
-import {BridgeCrossingStyle, BridgeManager, DefaultEdgePathCropper, Fill, GraphComponent, GraphEditorInputMode, GraphItemTypes, GraphObstacleProvider, HierarchicLayout, HierarchicNestingPolicy, ICanvasObjectDescriptor, IEdge, IGraph, INode, IPort, LayoutExecutor, License, ShapeNodeStyle, Size, TemplateNodeStyle} from 'yfiles';
+import {BridgeCrossingStyle, BridgeManager, DefaultEdgePathCropper, Fill, GraphComponent, GraphEditorInputMode, GraphItemTypes, GraphObstacleProvider, GraphViewerInputMode, HierarchicLayout, HierarchicNestingPolicy, ICanvasObjectDescriptor, IEdge, IGraph, INode, IPort, LayoutExecutor, License, ShapeNodeStyle, Size, TemplateNodeStyle} from 'yfiles';
 import {IFlowModel} from './IFlowModel';
 import {IFlowPortViewModel} from './IFlowPortViewModel';
 import {IFlowNodeModel} from './IFlowNodeModel';
@@ -20,11 +20,14 @@ export class Surface implements ISurface {
 
     private createInteractions() {
         const mode = new GraphEditorInputMode();
-        mode.showHandleItems = GraphItemTypes.ALL & ~GraphItemTypes.NODE;
+        mode.showHandleItems = GraphItemTypes.NONE;
         mode.createEdgeInputMode.useHitItemsCandidatesOnly = true;
         mode.allowCreateNode = false;
         mode.allowCreateEdge = true;
         mode.allowCreateBend = false;
+        mode.allowEditLabel = false;
+        mode.allowDuplicate = false;
+
         this.graphComponent.inputMode = mode;
 
         mode.addItemClickedListener((s, e) => {
@@ -212,7 +215,7 @@ export class Surface implements ISurface {
 
         executor.start().then( () => {
             this.graphComponent.fitContent();
-            this.graphComponent.zoom = 3;
+            this.graphComponent.zoom = 1;
         });
     }
 

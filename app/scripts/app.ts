@@ -9,6 +9,7 @@ import {RandomMode} from './elements/random/RandomFlowNodeViewModel';
 import {Class, LayoutExecutor} from 'yfiles';
 import {ISurface} from './core/ISurface';
 import {SpyFlowNodeController} from './elements/spy/SpyFlowNodeController';
+import {RaytraceFlowNodeController} from './elements/raytrace/RaytraceFlowNodeController';
 
 
 Class.ensure(LayoutExecutor);
@@ -43,6 +44,7 @@ class App {
         this.surface.connect(random.ports['Output'], barchart.ports['Input']);
         const spy = new SpyFlowNodeController(this.surface);
         this.surface.connect(random.ports['Output'], spy.ports['Input']);
+        const ray = new RaytraceFlowNodeController(this.surface);
         this.surface.layout();
     }
 
