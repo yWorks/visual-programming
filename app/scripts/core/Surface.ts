@@ -62,7 +62,7 @@ export class Surface implements ISurface {
     }
 
     private startListeningToFlow(item) {
-        if(!IEdge.isInstance(item)){
+        if (!IEdge.isInstance(item)) {
             return;
         }
         const edge = item as IEdge;
@@ -140,7 +140,7 @@ export class Surface implements ISurface {
                 if (_.isNumber(realValue)) {
                     return value;
                 } else if (_.isArray(realValue)) {
-                    const els = _.take(realValue, 2).join(', ');
+                    const els = _.take(realValue, 2).map(x => Math.round(x * 100) / 100).join(', ');
                     return `Array: ${els}...`;
                 } else {
                     if (value.length <= 10) {
@@ -154,6 +154,7 @@ export class Surface implements ISurface {
             }
         }
     }
+
     graph: IGraph;
     model: IFlowModel;
     graphComponent: GraphComponent;
@@ -213,7 +214,7 @@ export class Surface implements ISurface {
             fixPorts: true,
         });
 
-        executor.start().then( () => {
+        executor.start().then(() => {
             this.graphComponent.fitContent();
             this.graphComponent.zoom = 1;
         });

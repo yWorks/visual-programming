@@ -16,8 +16,8 @@ export class RaytraceFlowNodeController extends FlowNodeController {
             tag: this.viewModel
         });
 
-        const vmInput = this.viewModel.portViewModels['Input'];
-        this.ports['Input'] = this.surface.graph.addPort({owner:  this.node, locationParameter: FreeNodePortLocationModel.INSTANCE.createParameter( this.node, vmInput.position), style: this.inputStyle, tag: vmInput});
+        const vmInput = this.viewModel.portViewModels['SurfaceColor'];
+        this.ports['SurfaceColor'] = this.surface.graph.addPort({owner:  this.node, locationParameter: FreeNodePortLocationModel.INSTANCE.createParameter( this.node, vmInput.position), style: this.inputStyle, tag: vmInput});
 
     }
 

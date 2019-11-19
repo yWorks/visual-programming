@@ -1,20 +1,26 @@
-import {HtmlCanvasVisual, IRenderContext, NodeStyleBase, Point, Rect, SvgVisual} from 'yfiles'
-import {} from '../elements/raytrace/RaytraceFlowNodeViewModel';
+import {HtmlCanvasVisual, IRenderContext, NodeStyleBase, Rect, SvgVisual} from 'yfiles'
 import * as  _ from 'lodash';
-import {Material, RayTracer, roundRect, Scene, Sphere, Vector3} from './raytracer.js'
-
-const margin = {
-    top: 30,
-    right: 3,
-    bottom: -20,
-    left: 3
-};
+import {Material, RayTracer, roundRect, Scene, Sphere, Vector3} from './raytracer'
+import {RaytraceFlowNodeViewModel} from '../elements/raytrace/RaytraceFlowNodeViewModel';
 
 export class RaytraceVisual extends HtmlCanvasVisual {
+    get material(): Material {
+        return this._material;
+    }
+
+    set material(value: Material) {
+        this._material = value;
+        this.sphere.material = value;
+    }
+
+
     private rayTracer: RayTracer;
 
+    private _material: Material;
+    private sphere: Sphere;
+
     private getRendering(scaling) {
-        const buffer = this.rayTracer.render(Math.round(scaling*(105 - 2)), Math.round(scaling * (150 - 12)));
+        const buffer = this.rayTracer.render(Math.round(scaling * (105 - 2)), Math.round(scaling * (150 - 12)));
         return new Uint8ClampedArray(buffer);
     }
 
@@ -22,8 +28,9 @@ export class RaytraceVisual extends HtmlCanvasVisual {
 
     constructor() {
         super();
+        this._material = new Material(new Vector3(0.100, 0.32, 0.936), 0.1, 0.05, new Vector3(0.8, 0, 0));
         const scene = new Scene();
-
+        this.sphere = new Sphere(new Vector3(0, -1, -20), 3, this._material);
         // add background sphere
         scene.add(
             new Sphere(new Vector3(10.0, -10004, -20), 10000,
@@ -32,8 +39,7 @@ export class RaytraceVisual extends HtmlCanvasVisual {
 
         // add sphere
         scene.add(
-            new Sphere(new Vector3(0, -1, -20), 3,
-                new Material(new Vector3(0.100, 0.32, 0.936), 0.1, 0.05, new Vector3(0.8, 0, 0)))
+            this.sphere
         );
 
         // add lights
@@ -48,7 +54,7 @@ export class RaytraceVisual extends HtmlCanvasVisual {
 
         const backgroundColor = new Vector3(0.7, 0.8, 0.9);
 
-        // create ray tracer
+        // create the raytracer
         this.rayTracer = new RayTracer(backgroundColor, scene);
     }
 
@@ -59,8 +65,6 @@ export class RaytraceVisual extends HtmlCanvasVisual {
         const l = this.layout;
         const canvas = renderContext.canvasComponent;
         const viewPoint = canvas.viewPoint;
-        const viewPort = canvas.viewport;
-        const scaling = 1 / canvas.zoom;
 
 
         ctx.save();
@@ -73,11 +77,13 @@ export class RaytraceVisual extends HtmlCanvasVisual {
 
         ctx.restore();
         const factor = canvas.zoom;
-        const imageData = ctx.getImageData(l.x, l.y, Math.round(factor*(105 - 2)), Math.round(factor * (150 - 12)));
-        imageData.data.set(this.getRendering(factor));
-        // const p = canvas.toViewCoordinates(l)
-        ctx.putImageData(imageData, canvas.zoom * (-viewPoint.x + l.x), canvas.zoom * (-viewPoint.y + l.y));
-        // ctx.putImageData(imageData, p.x, p.y);
+        const im = this.getRendering(factor);
+        if(!_.isNil(im)){
+            const imageData = ctx.getImageData(l.x, l.y, Math.round(factor * (105 - 2)), Math.round(factor * (150 - 12)));
+            imageData.data.set(im);
+            ctx.putImageData(imageData, canvas.zoom * (-viewPoint.x + l.x + 1), canvas.zoom * (-viewPoint.y + l.y + 1));
+        }
+
 
         ctx.save();
         roundRect(ctx, l.x, l.y, l.width, l.height, 6, false);
@@ -97,46 +103,6 @@ export class RaytraceVisual extends HtmlCanvasVisual {
         ctx.strokeStyle = '#636363';
         ctx.lineWidth = 2;
         ctx.stroke();
-        return;
-
-
-        // ctx.translate(this.position.x, this.position.y);
-
-        ctx.save()
-
-        ctx.translate(viewPoint.x, viewPoint.y);
-        ctx.scale(scaling, scaling);
-        // create scene
-
-
-        // get canvas
-        const canvasWidth = 105;
-        const canvasHeight = 150;
-
-        // save start time
-        const startTime = Date.now();
-        // ctx.save();
-        // ctx.rect(1, 1, 104, 147);
-        // ctx.clip();
-        // ctx.fillStyle = '#6A5656';
-        // ctx.fillRect(0, 0, 105, 150);
-
-
-        ctx.fillStyle = 'green';
-        ctx.fillRect(0, 0, 110, 20);
-
-        ctx.font = '10px sans-serif';
-        ctx.fillStyle = 'white';
-        ctx.fillText('Raytrace', 7, 13);
-
-        // ctx.restore();
-        roundRect(ctx, 0, 0, 105, 150, 6, false);
-        ctx.strokeStyle = '#636363';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        ctx.restore()
-        const totalDuration = (Date.now() - startTime) / 1000;
-        // console.log(`Raytraced in ${totalDuration}s.`)
     }
 
 }
@@ -165,6 +131,7 @@ export default class RaytraceNodeStyle extends NodeStyleBase {
     updateVisual(renderContext, oldVisual, node) {
         const visual = oldVisual as RaytraceVisual;
         visual.layout = node.layout;
+        visual.material = (node.tag as RaytraceFlowNodeViewModel).material;
 
         return visual;
     }

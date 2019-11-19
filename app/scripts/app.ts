@@ -39,12 +39,13 @@ class App {
 
 
         const random = new RandomFlowNodeController(this.surface);
-        random.mode = RandomMode.NUMBER_ARRAY;
-        const barchart = new BarChartFlowNodeController(this.surface);
-        this.surface.connect(random.ports['Output'], barchart.ports['Input']);
-        const spy = new SpyFlowNodeController(this.surface);
-        this.surface.connect(random.ports['Output'], spy.ports['Input']);
+        random.mode = RandomMode.VECTOR3;
+        // const barchart = new BarChartFlowNodeController(this.surface);
+        // this.surface.connect(random.ports['Output'], barchart.ports['Input']);
+        // const spy = new SpyFlowNodeController(this.surface);
+        // this.surface.connect(random.ports['Output'], spy.ports['Input']);
         const ray = new RaytraceFlowNodeController(this.surface);
+        this.surface.connect(random.ports['Output'], ray.ports['SurfaceColor']);
         this.surface.layout();
     }
 

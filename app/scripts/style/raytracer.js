@@ -4,8 +4,7 @@
 
 const MAX_RAY_DEPTH = 1;
 const INFINITY = 1e8;
-
-
+import {MD5} from 'object-hash';
 
 /**
  * @class Scene
@@ -43,13 +42,14 @@ export class RenderPlanner {
         this.running = false;
         this.completedJobs = 0;
 
-        this.onUpdateReceived = function (sectionStart, sectionHeight, buf8) { };
+        this.onUpdateReceived = function (sectionStart, sectionHeight, buf8) {
+        };
 
         this.serializeScene();
 
         this.workers = [];
         for (var i = 0; i < this.jobCount; i++) {
-            this.workers.push(new Worker("../src/RenderWorker.js", { type: 'module' }));
+            this.workers.push(new Worker('../src/RenderWorker.js', {type: 'module'}));
         }
     }
 
@@ -84,14 +84,14 @@ export class RenderPlanner {
     prepareWorker(index, rendererWorker) {
         // send scene to workers
         rendererWorker.postMessage({
-            "action": "elements",
-            "data": this.serializedElements
+            'action': 'elements',
+            'data': this.serializedElements
         });
 
         // set background color
         rendererWorker.postMessage({
-            "action": "backgroundColor",
-            "data": [this.backgroundColor.x, this.backgroundColor.y, this.backgroundColor.z]
+            'action': 'backgroundColor',
+            'data': [this.backgroundColor.x, this.backgroundColor.y, this.backgroundColor.z]
         });
 
         var sectionHeight = Math.floor(this.height / this.jobCount);
@@ -99,8 +99,8 @@ export class RenderPlanner {
 
         // set ray tracer dimensions
         rendererWorker.postMessage({
-            "action": "dimensions",
-            "data": [this.width, this.height, sectionStart, sectionHeight]
+            'action': 'dimensions',
+            'data': [this.width, this.height, sectionStart, sectionHeight]
         });
 
         // add listeners
@@ -108,7 +108,7 @@ export class RenderPlanner {
             var action = e.data.action;
             var data = e.data.data;
 
-            if (action == "result") {
+            if (action == 'result') {
                 this.completedJobs++;
                 if (this.completedJobs == this.jobCount) {
                     this.running = false;
@@ -123,7 +123,7 @@ export class RenderPlanner {
     startWorker(rendererWorker) {
         // start rendering!
         rendererWorker.postMessage({
-            "action": "render"
+            'action': 'render'
         });
     }
 
@@ -137,8 +137,8 @@ export class RenderPlanner {
         for (var i = 0; i < this.workers.length; i++) {
             // send scene to workers
             this.workers[i].postMessage({
-                "action": "elements",
-                "data": this.serializedElements
+                'action': 'elements',
+                'data': this.serializedElements
             });
         }
     }
@@ -149,11 +149,15 @@ export class RenderPlanner {
  * @class Material
  */
 export class Material {
-    constructor(surfaceColor, reflection, transparency, emissionColor) {
+    constructor(/*Vector3*/surfaceColor,/*number*/ reflection,/*number*/ transparency,/*Vector3*/ emissionColor) {
         this.surfaceColor = surfaceColor;
         this.transparency = transparency;
         this.reflection = reflection;
         this.emissionColor = emissionColor;
+    }
+
+    get hash() {
+        return MD5([this.surfaceColor.x, this.surfaceColor.y, this.surfaceColor.z, this.reflection, this.transparency, this.emissionColor.x, this.emissionColor.y, this.emissionColor.z]);
     }
 }
 
@@ -162,6 +166,10 @@ export class Vector3 {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    get hash() {
+        return MD5([this.x, this.y, this.z]);
     }
 
     clone() {
@@ -231,7 +239,7 @@ export class Vector3 {
 /**
  * @class RayTracer
  */
-export   class RayTracer {
+export class RayTracer {
     constructor(backgroundColor, scene) {
         this.backgroundColor = backgroundColor;
         this.scene = scene;
@@ -244,7 +252,7 @@ export   class RayTracer {
         var elements = this.scene.getElements();
         var elementsLen = elements.length;
 
-        var hitInfo = { t0: INFINITY, t1: INFINITY };
+        var hitInfo = {t0: INFINITY, t1: INFINITY};
         for (var i = 0; i < elementsLen; i++) {
             hitInfo.t0 = INFINITY;
             hitInfo.t1 = INFINITY;
@@ -288,7 +296,7 @@ export   class RayTracer {
                 var transmission = new Vector3(1, 1, 1);
                 var lightDirection = el.getCenter().clone().subtract(intersectionPoint);
                 lightDirection.normalize();
-                var lightHitInfo = { t0: INFINITY, t1: INFINITY };
+                var lightHitInfo = {t0: INFINITY, t1: INFINITY};
 
                 for (var j = 0; j < elementsLen; j++) {
                     if (i != j) {
@@ -303,8 +311,9 @@ export   class RayTracer {
                 }
 
                 var lightRatio = Math.max(0, intersectionNormal.dotProduct(lightDirection));
-
-                surfaceColor.add(mat.surfaceColor.clone().product(transmission).product(lightMat.emissionColor.clone().multiply(lightRatio)));
+                if (mat.surfaceColor) {
+                    surfaceColor.add(mat.surfaceColor.clone().product(transmission).product(lightMat.emissionColor.clone().multiply(lightRatio)));
+                }
             }
         }
 
@@ -364,6 +373,7 @@ export   class RayTracer {
         return buffer;
     }
 }
+
 /**
  * @class Sphere
  */
@@ -420,13 +430,13 @@ export class Sphere {
         var reflection = this.material.reflection;
 
         return {
-            "center": [this.center.x, this.center.y, this.center.z],
-            "radius": this.radius,
-            "material": {
-                "surfaceColor": [sc.x, sc.y, sc.z],
-                "emissionColor": [ec.x, ec.y, ec.z],
-                "transparency": transparency,
-                "reflection": reflection
+            'center': [this.center.x, this.center.y, this.center.z],
+            'radius': this.radius,
+            'material': {
+                'surfaceColor': [sc.x, sc.y, sc.z],
+                'emissionColor': [ec.x, ec.y, ec.z],
+                'transparency': transparency,
+                'reflection': reflection
             }
         };
     }
@@ -466,28 +476,26 @@ function rendererMessageHandler(e) {
     var action = e.data.action;
     var data = e.data.data;
 
-    if (action == "elements") {
+    if (action == 'elements') {
         scene.clear();
         var elements = data;
         for (var i = 0; i < elements.length; i++) {
             scene.add(Sphere.deserialize(elements[i]));
         }
-    }
-    else if (action == "backgroundColor") {
+    } else if (action == 'backgroundColor') {
         backgroundColor.x = data[0];
         backgroundColor.y = data[1];
         backgroundColor.z = data[2];
-    }
-    else if (action == "dimensions") {
+    } else if (action == 'dimensions') {
         rendererWidth = data[0];
         rendererHeight = data[1];
         startY = data[2];
         scanHeight = data[3];
-    }
-    else if (action == "render") {
+    } else if (action == 'render') {
         startRendering();
     }
 }
+
 messageHandler = rendererMessageHandler;
 
 function startRendering() {
@@ -499,8 +507,8 @@ function startRendering() {
     // send result buffer
     var buf8 = new Uint8ClampedArray(buffer);
     postMessage({
-        "action": "result",
-        "data": buf8
+        'action': 'result',
+        'data': buf8
     });
 }
 
@@ -530,9 +538,9 @@ export function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
         radius = 5;
     }
     if (typeof radius === 'number') {
-        radius = { tl: radius, tr: radius, br: radius, bl: radius };
+        radius = {tl: radius, tr: radius, br: radius, bl: radius};
     } else {
-        var defaultRadius = { tl: 0, tr: 0, br: 0, bl: 0 };
+        var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
         for (var side in defaultRadius) {
             radius[side] = radius[side] || defaultRadius[side];
         }
