@@ -138,7 +138,7 @@ export class Surface implements ISurface {
 
                 const realValue = JSON.parse(value);
                 if (_.isNumber(realValue)) {
-                    return value;
+                    return Math.round(realValue * 100) / 100;
                 } else if (_.isArray(realValue)) {
                     const els = _.take(realValue, 2).map(x => Math.round(x * 100) / 100).join(', ');
                     return `Array: ${els}...`;

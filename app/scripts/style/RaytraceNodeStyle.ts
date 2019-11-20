@@ -2,6 +2,7 @@ import {HtmlCanvasVisual, IRenderContext, NodeStyleBase, Rect, SvgVisual} from '
 import * as  _ from 'lodash';
 import {Material, RayTracer, roundRect, Scene, Sphere, Vector3} from './raytracer'
 import {RaytraceFlowNodeViewModel} from '../elements/raytrace/RaytraceFlowNodeViewModel';
+import ImageFilters from './imageFilters';
 
 export class RaytraceVisual extends HtmlCanvasVisual {
     get material(): Material {
@@ -78,10 +79,12 @@ export class RaytraceVisual extends HtmlCanvasVisual {
         ctx.restore();
         const factor = canvas.zoom;
         const im = this.getRendering(factor);
-        if(!_.isNil(im)){
+        if (!_.isNil(im)) {
             const imageData = ctx.getImageData(l.x, l.y, Math.round(factor * (105 - 2)), Math.round(factor * (150 - 12)));
             imageData.data.set(im);
             ctx.putImageData(imageData, canvas.zoom * (-viewPoint.x + l.x + 1), canvas.zoom * (-viewPoint.y + l.y + 1));
+            // const gs = ImageFilters.threshold(imageData);
+            // ctx.putImageData(gs, canvas.zoom * (-viewPoint.x + l.x + 1), canvas.zoom * (-viewPoint.y + l.y + 1));
         }
 
 
@@ -132,7 +135,7 @@ export default class RaytraceNodeStyle extends NodeStyleBase {
         const visual = oldVisual as RaytraceVisual;
         visual.layout = node.layout;
         visual.material = (node.tag as RaytraceFlowNodeViewModel).material;
-
+        console.log(visual.material.reflection)
         return visual;
     }
 

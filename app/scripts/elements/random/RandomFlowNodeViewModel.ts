@@ -10,7 +10,8 @@ import * as _ from 'lodash';
 export enum RandomMode {
     NUNBER,
     NUMBER_ARRAY,
-    VECTOR3
+    VECTOR3,
+    UNIT
 }
 
 export interface IRandomGenerator {
@@ -46,6 +47,17 @@ export class Vector3Generator implements IRandomGenerator {
 
     generate(amount = 10): string {
         return JSON.stringify([Math.random(), Math.random(), Math.random()]);
+    }
+}
+
+export class UnitGenerator implements IRandomGenerator {
+
+    constructor() {
+
+    }
+
+    generate(amount = 10): string {
+        return JSON.stringify(Math.random());
     }
 }
 
@@ -114,9 +126,13 @@ export class RandomFlowNodeViewModel extends FlowNodeViewModel {
                 case RandomMode.VECTOR3:
                     this.generator = new Vector3Generator();
                     break;
+                case RandomMode.UNIT:
+                    this.generator = new UnitGenerator()
+                    break;
                 case RandomMode.NUNBER:
                     this.generator = new RandomNumberGenerator();
                     break;
+
 
             }
             this.ticker = setInterval(() => {

@@ -38,14 +38,20 @@ class App {
         // spy.enabled = false;
 
 
-        const random = new RandomFlowNodeController(this.surface);
-        random.mode = RandomMode.VECTOR3;
+        const r1 = new RandomFlowNodeController(this.surface);
+        r1.mode = RandomMode.VECTOR3;
+        const r2 = new RandomFlowNodeController(this.surface);
+        r2.mode = RandomMode.VECTOR3;
+        // const r3 = new RandomFlowNodeController(this.surface);
+        // r3.mode = RandomMode.UNIT;
         // const barchart = new BarChartFlowNodeController(this.surface);
         // this.surface.connect(random.ports['Output'], barchart.ports['Input']);
         // const spy = new SpyFlowNodeController(this.surface);
         // this.surface.connect(random.ports['Output'], spy.ports['Input']);
         const ray = new RaytraceFlowNodeController(this.surface);
-        this.surface.connect(random.ports['Output'], ray.ports['SurfaceColor']);
+        this.surface.connect(r1.ports['Output'], ray.ports['SurfaceColor']);
+        this.surface.connect(r2.ports['Output'], ray.ports['EmissionColor']);
+        // this.surface.connect(r3.ports['Output'], ray.ports['Reflection']);
         this.surface.layout();
     }
 

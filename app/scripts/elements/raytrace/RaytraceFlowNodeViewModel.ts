@@ -9,7 +9,7 @@ import {Material, Vector3} from '../../style/raytracer';
 export class RaytraceFlowNodeViewModel extends FlowNodeViewModel {
 
     get material() {
-        return new Material(this.surfaceColor, 0.1, 0.05, new Vector3(0.8, 0, 0));
+        return new Material(this.surfaceColor || new Vector3(0.0, 0.2, 0.8), this.reflection || 0.1, this.transparency || 0.05, this.emissionColor || new Vector3(0.8, 0, 0));
     }
 
     get emissionColor(): any {
@@ -17,26 +17,38 @@ export class RaytraceFlowNodeViewModel extends FlowNodeViewModel {
     }
 
     set emissionColor(value: any) {
-        value.forEach(this.ensureUnitSize);
-        this._emissionColor = value;
+        if (_.isString(value)) {
+            const found = this.parseVector3(value);
+            this._emissionColor = found;
+        } else {
+            value.forEach(this.ensureUnitSize);
+            this._emissionColor = new Vector3(value[0], value[1], value[2]);
+        }
+        this.firePropertyChanged('emissionColor');
+        this.setPropertyValue('emissionColor', this._emissionColor);
     }
 
-    get reflection(): number {
+    get reflection(): any {
         return this._reflection;
     }
 
-    set reflection(value: number) {
-        this.ensureUnitSize(value);
+    set reflection(value: any) {
+        value = this.parseUnit(value);
         this._reflection = value;
+        this.firePropertyChanged('reflection');
+        this.setPropertyValue('reflection', this._reflection);
+
     }
 
-    get transparency(): number {
+    get transparency(): any {
         return this._transparency;
     }
 
-    set transparency(value: number) {
-        this.ensureUnitSize(value);
+    set transparency(value: any) {
+        value = this.parseUnit(value);
         this._transparency = value;
+        this.firePropertyChanged('transparency');
+        this.setPropertyValue('transparency', this._transparency);
     }
 
     get surfaceColor(): any {
@@ -49,7 +61,7 @@ export class RaytraceFlowNodeViewModel extends FlowNodeViewModel {
             this._surfaceColor = found;
         } else {
             value.forEach(this.ensureUnitSize);
-            this._surfaceColor = new Vector3(value[0],value[1],value[2]);
+            this._surfaceColor = new Vector3(value[0], value[1], value[2]);
         }
         this.firePropertyChanged('surfaceColor');
         this.setPropertyValue('surfaceColor', this._surfaceColor);
@@ -73,6 +85,9 @@ export class RaytraceFlowNodeViewModel extends FlowNodeViewModel {
         super('Raytracer', model);
 
         this.portViewModels['SurfaceColor'] = new FlowPortViewModel('surfaceColor', PortType.INPUT, this, new Point(0.0, 30 - 2));
+        this.portViewModels['EmissionColor'] = new FlowPortViewModel('emissionColor', PortType.INPUT, this, new Point(0.0, 50 - 2));
+        this.portViewModels['Reflection'] = new FlowPortViewModel('reflection', PortType.INPUT, this, new Point(0.0, 70 - 2));
+        this.portViewModels['Transparency'] = new FlowPortViewModel('transparency', PortType.INPUT, this, new Point(0.0, 90 - 2));
         this.model.nodes[this.id] = new FlowNodeModel(this.id, this.model);
 
     }
@@ -82,6 +97,13 @@ export class RaytraceFlowNodeViewModel extends FlowNodeViewModel {
 
     }
 
+    parseUnit(x: any): number {
+        if (_.isString(x)) {
+            x = parseFloat(x);
+        }
+        this.ensureUnitSize(x);
+        return x;
+    }
 
     parseVector3(x: string): Vector3 {
         if (_.isString(x)) {
@@ -91,7 +113,7 @@ export class RaytraceFlowNodeViewModel extends FlowNodeViewModel {
                     throw new Error('Given string is not a Vector3 type.');
                 }
                 found.forEach(this.ensureUnitSize);
-                return new Vector3(found[0],found[1],found[2]);
+                return new Vector3(found[0], found[1], found[2]);
             }
         }
         throw new Error('Expected a Vector3 type.');
