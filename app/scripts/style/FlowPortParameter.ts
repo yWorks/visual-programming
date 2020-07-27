@@ -10,16 +10,10 @@ export class FlowPortParameter extends BaseClass<IPortLocationModelParameter>(IP
         return this._portIndex;
     }
 
-    /**
-     * @returns {PortType}
-     */
     get portType(): PortType {
         return this._portType;
     }
 
-    /**
-     * @returns {IPortLocationModel}
-     */
     get model(): FlowPortModel {
         return this._model;
     }

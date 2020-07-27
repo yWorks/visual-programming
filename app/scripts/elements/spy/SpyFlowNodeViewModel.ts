@@ -19,7 +19,6 @@ export class SpyFlowNodeViewModel extends FlowNodeViewModel {
     public set value(value: string) {
         this._value = value;
         this.firePropertyChanged('value');
-        // console.log(`Spy: ${value}`)
     }
 
     public get value(): string {

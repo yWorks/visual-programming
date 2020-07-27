@@ -5,7 +5,7 @@ import {IFlowPortViewModel} from './IFlowPortViewModel';
 /**
  * Defines the view-model of a flow element.
  */
-export interface IFlowNodeViewModel extends IPropertyObservable {
+export interface IFlowNodeViewModel {
     id: string;
     model: IFlowModel;
     title: String;

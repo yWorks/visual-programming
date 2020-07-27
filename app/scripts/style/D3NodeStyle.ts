@@ -16,7 +16,9 @@ const yHelper = d3.scaleLinear().nice();
 
 const color = d3
     .scaleLinear()
+    // @ts-ignore
     .range(['#1dccc2', '#2f5b88'])
+    // @ts-ignore
     .interpolate(d3.interpolateHcl);
 
 export default class D3ChartNodeStyle extends NodeStyleBase {
@@ -38,7 +40,7 @@ export default class D3ChartNodeStyle extends NodeStyleBase {
             layout: {x, y, width, height},
             tag: viewModel
         } = node;
-        if (!BarChartFlowNodeViewModel.isInstance(viewModel)) {
+        if (!(viewModel instanceof BarChartFlowNodeViewModel)) {
             throw new Error('Expected a view-model for the D3NodeStyle.');
         }
         let data = (viewModel as BarChartFlowNodeViewModel).values;
@@ -145,7 +147,7 @@ export default class D3ChartNodeStyle extends NodeStyleBase {
             layout: {x, y, width, height},
             tag: viewModel
         } = node;
-        if (!BarChartFlowNodeViewModel.isInstance(viewModel)) {
+        if (!(viewModel instanceof BarChartFlowNodeViewModel)) {
             throw new Error('Expected a view-model for the D3NodeStyle.');
         }
         let data = (viewModel as BarChartFlowNodeViewModel).values;

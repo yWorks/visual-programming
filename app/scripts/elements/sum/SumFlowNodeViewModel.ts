@@ -75,6 +75,4 @@ export class SumFlowNodeViewModel extends FlowNodeViewModel {
         }
         return null;
     }
-
-
 }

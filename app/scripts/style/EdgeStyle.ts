@@ -2,9 +2,20 @@
  * An edge style that draws a bendless edge in an orthogonal fashion.
  * All existing bends of the edge are ignored.
  */
-import {BaseClass, GeneralPath, IArrow, IEdgeStyle, List, PathBasedEdgeStyleRenderer, Point, SolidColorFill, Stroke} from 'yfiles';
+import {
+    BaseClass, Fill, FillConvertible,
+    GeneralPath,
+    IArrow,
+    IEdgeStyle,
+    List,
+    PathBasedEdgeStyleRenderer,
+    Point,
+    SolidColorFill,
+    Stroke,
+    Tangent
+} from 'yfiles';
 
-export default class RoutingEdgeStyle extends BaseClass(IEdgeStyle) {
+export default class RoutingEdgeStyle extends BaseClass<IEdgeStyle>(IEdgeStyle) {
     private inSegmentLengthField: any;
     private outSegmentLengthField: any;
     private middleSegmentOffsetField: number;
@@ -15,12 +26,12 @@ export default class RoutingEdgeStyle extends BaseClass(IEdgeStyle) {
 
     /**
      * Creates a new instance of RoutingEdgeStyle.
-     * @param {number} outSegmentLength The length of the horizontal segment that connects to the source node.
-     * @param {number} inSegmentLength The length of the horizontal segment that connects to the target node.
-     * @param {Fill?} fill
-     * @param {number?} thickness
+     * @param outSegmentLength The length of the horizontal segment that connects to the source node.
+     * @param inSegmentLength The length of the horizontal segment that connects to the target node.
+     * @param fill
+     * @param thickness
      */
-    constructor(outSegmentLength, inSegmentLength, fill = null, thickness = null) {
+    constructor(outSegmentLength: number, inSegmentLength: number, fill: Fill|FillConvertible = null, thickness: number = 0) {
         super();
         this.inSegmentLengthField = inSegmentLength;
         this.outSegmentLengthField = outSegmentLength;
@@ -153,7 +164,8 @@ export default class RoutingEdgeStyle extends BaseClass(IEdgeStyle) {
     /**
      * @returns {Object}
      */
-    clone() {
+    // @ts-ignore
+    clone(): RoutingEdgeStyle {
         return new RoutingEdgeStyle(this.outSegmentLength, this.inSegmentLength)
     }
 }
@@ -223,9 +235,12 @@ class RoutingEdgeStyleRenderer extends PathBasedEdgeStyleRenderer<RoutingEdgeSty
         return points
     }
 
-    // @ts-ignore
-    getTangent(segmentIndex, ratio) {
-        return this.getPath().getTangent(segmentIndex, ratio)
+    getTangent(ratio: number): Tangent | null {
+        return this.getPath().getTangent(ratio)
+    }
+
+    getTangentForSegment(segmentIndex, ratio) {
+        return this.getPath().getTangentForSegment(segmentIndex, ratio)
     }
 
     getSegmentCount() {

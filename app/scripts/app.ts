@@ -10,6 +10,7 @@ import {Class, LayoutExecutor} from 'yfiles';
 import {ISurface} from './core/ISurface';
 import {SpyFlowNodeController} from './elements/spy/SpyFlowNodeController';
 import {RaytraceFlowNodeController} from './elements/raytrace/RaytraceFlowNodeController';
+import {SumFlowNodeController} from "./elements/sum/SumFlowNodeController";
 
 
 Class.ensure(LayoutExecutor);
@@ -24,34 +25,33 @@ class App {
 
     createSampleGraph() {
 
-        // const r = new RandomFlowNodeController(model, surface);
-        // r.create();
-        // const r2 = new RandomFlowNodeController(model, surface);
-        // r2.create();
-        // const sum = new SumFlowNodeController(model, surface);
-        // sum.create();
-        // const spy = new SpyFlowNodeController(model, surface);
-        // spy.create();
-        // surface.connect(r.ports['Output'], sum.ports['Input1']);
-        // surface.connect(r2.ports['Output'], sum.ports['Input2']);
-        // surface.connect(sum.ports['Output'], spy.ports['Input']);
-        // spy.enabled = false;
+         const rs1 = new RandomFlowNodeController(this.surface);
+         rs1.mode = RandomMode.NUNBER
+         const rs2 = new RandomFlowNodeController(this.surface);
+        rs2.mode = RandomMode.NUNBER
+         const sum = new SumFlowNodeController(this.surface);
+         const sumSpy = new SpyFlowNodeController(this.surface);
+        this.surface.connect(rs1.ports['Output'], sum.ports['Input1']);
+        this.surface.connect(rs2.ports['Output'], sum.ports['Input2']);
+        this.surface.connect(sum.ports['Output'], sumSpy.ports['Input']);
+        sumSpy.enabled = false;
 
 
         const r1 = new RandomFlowNodeController(this.surface);
         r1.mode = RandomMode.VECTOR3;
         const r2 = new RandomFlowNodeController(this.surface);
         r2.mode = RandomMode.VECTOR3;
-        // const r3 = new RandomFlowNodeController(this.surface);
-        // r3.mode = RandomMode.UNIT;
-        // const barchart = new BarChartFlowNodeController(this.surface);
-        // this.surface.connect(random.ports['Output'], barchart.ports['Input']);
-        // const spy = new SpyFlowNodeController(this.surface);
-        // this.surface.connect(random.ports['Output'], spy.ports['Input']);
+        const r3 = new RandomFlowNodeController(this.surface);
+        r3.mode = RandomMode.UNIT;
+        const r4 = new RandomFlowNodeController(this.surface);
+        r4.mode = RandomMode.NUMBER_ARRAY;
+        const barchart = new BarChartFlowNodeController(this.surface);
+        this.surface.connect(r4.ports['Output'], barchart.ports['Input']);
+        const spy = new SpyFlowNodeController(this.surface);
+        this.surface.connect(r3.ports['Output'], spy.ports['Input']);
         const ray = new RaytraceFlowNodeController(this.surface);
         this.surface.connect(r1.ports['Output'], ray.ports['SurfaceColor']);
         this.surface.connect(r2.ports['Output'], ray.ports['EmissionColor']);
-        // this.surface.connect(r3.ports['Output'], ray.ports['Reflection']);
         this.surface.layout();
     }
 

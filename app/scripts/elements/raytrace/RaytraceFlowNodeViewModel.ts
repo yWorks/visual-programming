@@ -9,7 +9,12 @@ import {Material, Vector3} from '../../style/raytracer';
 export class RaytraceFlowNodeViewModel extends FlowNodeViewModel {
 
     get material() {
-        return new Material(this.surfaceColor || new Vector3(0.0, 0.2, 0.8), this.reflection || 0.1, this.transparency || 0.05, this.emissionColor || new Vector3(0.8, 0, 0));
+        if (this._material.surfaceColor.equals(this.surfaceColor || new Vector3(0.0, 0.2, 0.8)) &&
+            this._material.reflection === (this.reflection || 0.1) && this._material.transparency === (this.transparency || 0.05) &&
+        this._material.emissionColor.equals(this.emissionColor || new Vector3(0.8, 0, 0))){
+            return this._material
+        }
+        return this._material = new Material(this.surfaceColor || new Vector3(0.0, 0.2, 0.8), this.reflection || 0.1, this.transparency || 0.05, this.emissionColor || new Vector3(0.8, 0, 0));
     }
 
     get emissionColor(): any {
@@ -71,6 +76,7 @@ export class RaytraceFlowNodeViewModel extends FlowNodeViewModel {
     private _transparency: number;
     private _reflection: number;
     private _emissionColor: Vector3;
+    private _material : Material;
 
     private ensureUnitSize(x: number) {
         if (_.isNil(x)) {
@@ -89,6 +95,7 @@ export class RaytraceFlowNodeViewModel extends FlowNodeViewModel {
         this.portViewModels['Reflection'] = new FlowPortViewModel('reflection', PortType.INPUT, this, new Point(0.0, 70 - 2));
         this.portViewModels['Transparency'] = new FlowPortViewModel('transparency', PortType.INPUT, this, new Point(0.0, 90 - 2));
         this.model.nodes[this.id] = new FlowNodeModel(this.id, this.model);
+        this._material = new Material(this.surfaceColor || new Vector3(0.0, 0.2, 0.8), this.reflection || 0.1, this.transparency || 0.05, this.emissionColor || new Vector3(0.8, 0, 0));
 
     }
 

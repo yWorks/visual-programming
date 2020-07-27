@@ -1,12 +1,12 @@
 import {HtmlCanvasVisual, IRenderContext, Point} from 'yfiles';
 
 export class BackGridStyle extends HtmlCanvasVisual {
-    minorTickSpacing: number
-    minorTickSize: number
     private scaleFactor: number;
     private majorTickSpacing: number;
     private labeledTickSpacing: number;
     private tickSpacingFactor: number;
+    minorTickSpacing: number
+    minorTickSize: number
 
     constructor() {
         super();

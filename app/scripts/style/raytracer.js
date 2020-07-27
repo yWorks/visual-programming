@@ -117,6 +117,10 @@ export class Vector3 {
         this.z = -this.z;
         return this;
     }
+
+    equals(otherVector){
+        return this.x === otherVector.x && this.y === otherVector.y && this.z === otherVector.z;
+    }
 }
 
 /**
@@ -205,7 +209,7 @@ export class RayTracer {
         return surfaceColor;
     }
 
-    render(width, height, startY, scanHeight) {
+    render(width, height, startY = undefined, scanHeight = undefined) {
         if (startY === undefined) {
             startY = 0;
         }

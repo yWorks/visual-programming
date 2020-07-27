@@ -1,5 +1,4 @@
-import {BaseClass, DefaultPortCandidate, IEnumerable, IInputModeContext, INode, IPortCandidate, IPortCandidateProvider, List, PortCandidateProviderBase} from 'yfiles';
-import {FlowPortModel} from './FlowPortModel';
+import {IEnumerable, IInputModeContext, INode, IPortCandidate, List, PortCandidateProviderBase} from 'yfiles';
 import {PortType} from '../core/PortType';
 import {IFlowPortViewModel} from '../core/IFlowPortViewModel';
 

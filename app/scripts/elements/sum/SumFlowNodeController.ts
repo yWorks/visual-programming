@@ -6,8 +6,8 @@ import {FreeNodePortLocationModel, Rect, TemplateNodeStyle} from 'yfiles';
 
 export class SumFlowNodeController extends FlowNodeController {
 
-    constructor(model: IFlowModel, surface: ISurface) {
-        super(model, surface);
+    constructor(surface: ISurface) {
+        super(surface);
         this.init();
     }
 

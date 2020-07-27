@@ -1,5 +1,5 @@
 import {ISurface} from './ISurface';
-import {BridgeCrossingStyle, BridgeManager, DefaultEdgePathCropper, Fill, GraphComponent, GraphEditorInputMode, GraphItemTypes, GraphObstacleProvider, GraphViewerInputMode, HierarchicLayout, HierarchicNestingPolicy, ICanvasObjectDescriptor, IEdge, IGraph, INode, IPort, LayoutExecutor, License, ShapeNodeStyle, Size, TemplateNodeStyle} from 'yfiles';
+import {BridgeCrossingStyle, BridgeManager, DefaultEdgePathCropper, Fill, GraphComponent, GraphEditorInputMode, GraphItemTypes, GraphObstacleProvider, HierarchicLayout, HierarchicNestingPolicy, IEdge, IGraph, INode, IPort, LayoutExecutor, License, ShapeNodeStyle, Size, TemplateNodeStyle} from 'yfiles';
 import {IFlowModel} from './IFlowModel';
 import {IFlowPortViewModel} from './IFlowPortViewModel';
 import {IFlowNodeModel} from './IFlowNodeModel';
@@ -10,8 +10,7 @@ import IFlowEdgeViewModel from './IFlowEdgeViewModel';
 import RoutingEdgeStyle from '../style/EdgeStyle';
 import PortCandidateProvider from '../style/PortCandidateProvider';
 import * as _ from 'lodash';
-import {BackGridStyle} from '../style/BackGridStyle';
-
+import license from '../../../yfiles-license.json';
 
 /**
  * High-level API managing the flow.
@@ -173,26 +172,7 @@ export class Surface implements ISurface {
     }
 
     setLicense() {
-
-        License.value = {
-            'company': 'The Orbifold b.v.b.a.',
-            'date': '10/22/2019',
-            'distribution': true,
-            'domains': [
-                '*'
-            ],
-            'fileSystemAllowed': true,
-            'licensefileversion': '1.1',
-            'localhost': true,
-            'oobAllowed': true,
-            'package': 'complete',
-            'product': 'yFiles for HTML',
-            'projectname': 'yWorks Consulting',
-            'subscription': '12/31/2020',
-            'type': 'project',
-            'version': '2.2',
-            'key': 'd9568c2bdf4ebd16cf3d80a0edc8fe155ca5a38c'
-        };
+        License.value = license
     }
 
     createComponent() {

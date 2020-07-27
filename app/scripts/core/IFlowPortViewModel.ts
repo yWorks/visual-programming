@@ -6,7 +6,7 @@ import {IFlowNodeModel} from './IFlowNodeModel';
 /**
  * Defines the view-model of a port.
  */
-export interface IFlowPortViewModel extends IPropertyObservable {
+export interface IFlowPortViewModel {
     /**
      * The name of the property or port.
      */
