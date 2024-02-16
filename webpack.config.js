@@ -62,7 +62,9 @@ module.exports = function (env, options) {
 
   if (options.mode === 'development') {
     config.devServer = {
-      contentBase: [path.join(__dirname, './app')],
+      static: {
+        directory: path.join(__dirname, './app'),
+      },
       compress: true,
       port: 9003
     };
